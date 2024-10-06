@@ -1,0 +1,61 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: grafana
+  namespace: prometheus
+  labels:
+    app: grafana
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: grafana
+  template:
+    metadata:
+      labels:
+        app: grafana
+    spec:
+      containers:
+        - name: grafana
+          image: grafana/grafana:latest
+          ports:
+            - containerPort: 3000
+          env:
+            - name: GF_SECURITY_ADMIN_PASSWORD
+              valueFrom:
+                secretKeyRef:
+                  name: grafana-secret
+                  key: GF_SECURITY_ADMIN_PASSWORD 
+          volumeMounts:
+            - name: grafana-storage
+              mountPath: /var/lib/grafana
+          resources:
+            limits:
+              memory: 100Mi
+              cpu: 100m
+      volumes:
+        - name: grafana-storage
+          emptyDir: {}
+---
+apiVersion: v1
+kind: Secret
+metadata:
+  name: grafana-secret
+  namespace: prometheus
+type: Opaque
+data:
+  GF_SECURITY_ADMIN_PASSWORD: TG9naW4xMjMk
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: grafana
+  namespace: prometheus
+spec:
+  type: LoadBalancer
+  ports:
+    - port: 80
+      targetPort: 3000
+      protocol: TCP
+  selector:
+    app: grafana
