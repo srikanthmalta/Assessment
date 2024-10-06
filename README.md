@@ -2,6 +2,11 @@
 
 This README.md provides an explanation of the requirements for a simple DevOps test, including Dockerizing the application, deploying with Kubernetes, setting up Prometheus monitoring, and integrating with the ELK stack.
 
+# Solution
+Below link containe the validation screen shots for the solution which i have implemented. 
+
+https://github.com/srikanthmalta/Assessment/blob/main/Kubernetes/High%20level%20Implementation%20Process.docx
+
 ## 1. Dockerize the Application
 
 ### Dockerfile
